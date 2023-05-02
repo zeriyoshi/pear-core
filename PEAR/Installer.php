@@ -1413,7 +1413,11 @@ class PEAR_Installer extends PEAR_Downloader
         if ($this->source_files > 0 && empty($options['nobuild'])) {
             $configureoptions = empty($options['configureoptions']) ? '' : $options['configureoptions'];
             if (PEAR::isError($err =
-                  $this->_compileSourceFiles($savechannel, $pkg, $configureoptions))) {
+                  $this->_compileSourceFiles($savechannel,
+                      $pkg,
+                      $configureoptions,
+                      isset($options['jobs']) ? $options['jobs'] : 1
+                  ))) {
                 return $err;
             }
         }
@@ -1511,14 +1515,15 @@ class PEAR_Installer extends PEAR_Downloader
      * @param string
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      * @param mixed[] $configureoptions
+     * @param positive-int $jobs
      */
-    function _compileSourceFiles($savechannel, &$filelist, $configureoptions)
+    function _compileSourceFiles($savechannel, &$filelist, $configureoptions, $jobs = 1)
     {
         require_once 'PEAR/Builder.php';
         $this->log(1, "$this->source_files source files, building");
         $bob = new PEAR_Builder($configureoptions, $this->ui);
         $bob->debug = $this->debug;
-        $built = $bob->build($filelist, array(&$this, '_buildCallback'));
+        $built = $bob->build($filelist, array(&$this, '_buildCallback'), $jobs);
         if (PEAR::isError($built)) {
             $this->rollbackFileTransaction();
             $this->configSet('default_channel', $savechannel);

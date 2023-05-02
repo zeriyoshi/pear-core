@@ -282,6 +282,7 @@ class PEAR_Builder extends PEAR_Common
      *
      * @param mixed $callback callback function used to report output,
      * see PEAR_Builder::_runCommand for details
+     * @param positive-int $jobs number of parallel jobs to run
      *
      * @return array an array of associative arrays with built files,
      * format:
@@ -295,7 +296,7 @@ class PEAR_Builder extends PEAR_Common
      *
      * @see PEAR_Builder::_runCommand
      */
-    function build($descfile, $callback = null)
+    function build($descfile, $callback = null, $jobs = 1)
     {
         if (preg_match('/(\\/|\\\\|^)([^\\/\\\\]+)?php([^\\/\\\\]+)?$/',
                        $this->config->get('php_bin'), $matches)) {
@@ -438,7 +439,7 @@ class PEAR_Builder extends PEAR_Common
 
         $to_run = array(
             $configure_command,
-            $make_command,
+            "{$make_command} -j{$jobs}",
             "$make_command INSTALL_ROOT=\"$inst_dir\" install",
             "find \"$inst_dir\" | xargs ls -dils"
             );

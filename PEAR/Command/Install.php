@@ -105,7 +105,13 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'shortopt' => 'p',
                     'doc' => 'Only list the packages that would be downloaded',
                     ),
+                'jobs' => array(
+                    'shortopt' => 'j',
+                    'arg' => 'N',
+                    'doc' => 'Run N jobs in parallel',
+                    ),
                 ),
+
             'doc' => '[channel/]<package> ...
 Installs one or more PEAR packages.  You can specify a package to
 install in four ways:
@@ -191,6 +197,11 @@ four ways of specifying packages.
                     'shortopt' => 'p',
                     'doc' => 'Only list the packages that would be downloaded',
                     ),
+                'jobs' => array(
+                    'shortopt' => 'j',
+                    'arg' => 'N',
+                    'doc' => 'Run N jobs in parallel',
+                    ),
                 ),
             'doc' => '<package> ...
 Upgrades one or more PEAR packages.  See documentation for the
@@ -238,6 +249,11 @@ More than one package may be specified at once.
                     ),
                 'loose' => array(
                     'doc' => 'do not check for recommended dependency version',
+                    ),
+                'jobs' => array(
+                    'shortopt' => 'j',
+                    'arg' => 'N',
+                    'doc' => 'Run N jobs in parallel',
                     ),
                 ),
             'doc' => '
